@@ -1,0 +1,19 @@
+{
+  "name": "completebackend",
+  "version": "1.0.0",
+  "description": "basic backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "ganesh",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1"
+  }
+}
