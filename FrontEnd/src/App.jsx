@@ -22,7 +22,7 @@ useEffect(()=>{
 {
   jokes.map((joke,index)=>(
     <div key = {joke.id}>
-      <h1>{joke.title}</h1>
+      <h1>{joke.Title}</h1>
     </div>
   ))
 }
