@@ -2,9 +2,10 @@ import express from "express";
 import cors from "cors";
 import connectDB from "./config/mongoDB.js";
 import cookieParser from "cookie-parser";
+import productRoutes from  "../src/Routes/product.routes.js"
 
 const app = express();
-const PORT = 4000;
+const PORT = 5000;
 
 app.get("/", (req, res) => {
   res.send("hello world");
@@ -16,6 +17,8 @@ app.use(
   })
 );
 app.use(cookieParser());
+app.use("/api/products", productRoutes);
+
 app.use(express({ limit: "16kb" }));
 app.use(express.urlencoded({extended :true,limit:"16kb"}))
 app.use(express.static("public"))
