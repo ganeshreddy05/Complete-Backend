@@ -1,41 +1,32 @@
+import redisClient from "../config/redis.js";
 import Product from "../models/Productmodel.js";
-import uploadImageToCloudinary from "../utils/uploadToCloudinary.js";
 
-export const createProduct = async (req, res) => {
+export const getAllProducts = async (req, res) => {
   try {
-    // 1️⃣ Get text data
-    const { name, price } = req.body;
 
-    // 2️⃣ Get uploaded file from multer
-    const file = req.file;
+    const cacheKey = "all_products";
 
-    if (!file) {
-      return res.status(400).json({
-        message: "Image is required",
-      });
+    // 1️⃣ Check Redis
+    const cachedData = await redisClient.get(cacheKey);
+
+    if (cachedData) {
+      console.log("Serving from cache");
+      return res.json(JSON.parse(cachedData));
     }
 
-    // 3️⃣ Upload image to cloudinary
-    const cloudinaryResponse = await uploadImageToCloudinary(
-      file.buffer
+    // 2️⃣ Fetch from database
+    const products = await Product.find();
+
+    // 3️⃣ Store in Redis with TTL
+    await redisClient.setEx(
+      cacheKey,
+      3600,
+      JSON.stringify(products)
     );
 
-    // 4️⃣ Save product to DB
-    const newProduct = await Product.create({
-      name,
-      price,
-      image: cloudinaryResponse.secure_url,
-    });
-
-    res.status(201).json({
-      message: "Product created successfully",
-      product: newProduct,
-    });
+    res.json(products);
 
   } catch (error) {
-    res.status(500).json({
-      message: "Error creating product",
-      error: error.message,
-    });
+    res.status(500).json({ error: error.message });
   }
 };
