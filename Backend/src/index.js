@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import connectDB from "./config/mongoDB.js";
 import cookieParser from "cookie-parser";
-import productRoutes from  "../src/Routes/product.routes.js"
+//  import productRoutes from  "../src/Routes/product.routes.js"
+import authRoutes from "../src/Routes/auth.routes.js"
 
 const app = express();
 const PORT = 5000;
@@ -17,11 +18,13 @@ app.use(
   })
 );
 app.use(cookieParser());
-app.use("/api/products", productRoutes);
+// app.use("/api/products", productRoutes);
 
 app.use(express({ limit: "16kb" }));
+app.use(express.json());
 app.use(express.urlencoded({extended :true,limit:"16kb"}))
 app.use(express.static("public"))
+app.use("/api/auth", authRoutes);
 
 async function startingBackendApplication() {
   await connectDB();

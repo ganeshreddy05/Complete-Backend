@@ -8,5 +8,8 @@ redisClient.on("error",(err)=>{
     console.log("redis error :",err);
 });
 await redisClient.connect();
+redisClient.on("connect", () => {
+  console.log("✅ Redis Connected");
+});
 
 export default redisClient;
